@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TODO VUE</title>
+</head>
+
+<body>
+    <div id="app">
+        <app-header></app-header>
+        <input type="text" v-model="inputText" v-on:keyup.enter="addItem" name="" id="">
+        <button v-on:click="addItem">add</button>
+        <button v-on:click="fetchItems">view list</button>
+        
+        {{ todoItems }}
+        <ul>
+            <li v-for="(item, i) in todoItems">{{ item }} <button v-on:click="delItem(item, i)">delItem</button></li>
+    </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            created: function(){
+                this.fetchItems();
+            },
+            components: {
+                'app-header' : {
+                    template: '<h1>TODO VUE LIST</h1>'
+                }
+            },
+            data: {
+                inputText: '',
+                todoItems: []
+            },
+            methods: {
+                addItem: function(event){
+                        var value = this.inputText;
+                        localStorage.setItem(value, value);
+                        this.inputText = '';
+                        this.todoItems.push(value);
+                },
+                fetchItems: function(){
+                    console.log('fetchItem');
+                    
+                    // axios.get()
+                    for (var i = 0; i < localStorage.length; i++){
+                        var value = localStorage.key(i);
+                        console.log(value);
+                        this.todoItems.push(value);
+                    }
+                    
+                    
+                },
+                delItem: function(item, i){
+                    this.todoItems.splice(i, 1);
+                    localStorage.removeItem(item);
+                    console.log(item, i);
+                    
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
